@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Okuma Macerası</title>
   <style>
+    /* Genel Stiller */
     body {
       font-family: 'Comic Sans MS', sans-serif;
-      background-image: url('arkaplan.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
+      background-image: url('arkaplan.jpg'); /* Arka plan görseli */
+      background-size: cover; /* Görselin ekranı tamamen kaplaması */
+      background-repeat: no-repeat; /* Görselin tekrar etmemesi */
+      background-position: center; /* Görselin ortalanması */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -20,7 +21,7 @@
 
     .container {
       text-align: center;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: #fff;
       padding: 20px;
       border-radius: 15px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -95,6 +96,51 @@
     .hidden {
       display: none;
     }
+
+    /* Responsive Tasarım */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .word {
+        font-size: 1.2em;
+        margin-right: 5px;
+      }
+
+      button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+      }
+
+      #text-box {
+        padding: 10px;
+      }
+
+      #timer {
+        font-size: 1.2em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .word {
+        font-size: 1em;
+        margin-right: 4px;
+      }
+
+      button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+      }
+
+      #timer {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -136,31 +182,11 @@
 
   <script>
     let stories = [
-     "Deniz kenarında yürüyen küçük kız, kumların arasında parıldayan bir taş buldu. Taşı eline aldığında, taşın içinden parlayan küçük bir dünya gördü. Taşı dikkatle inceledi ve bir deniz kabuğu gibi ses çıkardığını fark etti. Bu keşfi onu çok heyecanlandırdı.",
-      "Bir orman gezisinde, küçük bir çocuk eski bir harita buldu. Haritada kayıp bir hazine işaretlenmişti. Haritayı dikkatle inceledi ve hazineye ulaşmak için bir plan yaptı. Arkadaşlarını çağırarak birlikte ormanda hazine aramaya başladılar.",
-      "Ormanlar, dünyamızın akciğerleri olarak bilinir ve birçok canlıya ev sahipliği yapar. Ağaçlar, fotosentez yoluyla oksijen üretir, böylece soluduğumuz temiz havayı sağlar. Ormanları korumak, ekosistemimizin sağlıklı kalması için çok önemlidir.",
-      "Bir kış sabahı, Elif penceresinden dışarı baktı ve her yerin karla kaplandığını gördü. Heyecanla montunu giyip bahçeye koştu. Kar topu oynamak için arkadaşlarını çağırdı ve eğlenceli bir gün geçirdiler.",
-      "Küçük bir köyde yaşayan Ali, gökyüzündeki yıldızları izlemeyi çok severdi. Bir gece, teleskobuyla yeni bir yıldız keşfettiğini düşündü. Bu heyecan verici keşfini ailesine anlattı ve herkes onunla gurur duydu.",
-      "Yıldızlar, devasa gaz kütlelerinden oluşur ve kendi ışıklarını yayarlar. Gökyüzünde gördüğümüz yıldızlar, çok uzak mesafelerde yer alır. Yıldızlar gece gökyüzünü aydınlatır ve bizlere evrenin büyüklüğünü hatırlatır.",
-      "Mert, ilk defa kamp yapmaya gittiğinde ormanın derinliklerine doğru yürüdü. Bir çadır kurdu ve gece boyunca yıldızları izledi. Sabah olduğunda, kuş cıvıltılarıyla uyandı ve doğanın sessizliğini çok sevdi.",
-      "Küçük Zeynep, dedesinin köyüne gitmeyi çok severdi. Köydeki eski ev, taş duvarları ve büyük bahçesiyle onu çok etkilerdi. Bir gün dedesiyle bahçeye fidan dikti ve toprağı nasıl koruması gerektiğini öğrendi. Zeynep, doğanın önemini anlamaya başladı.",
-      "Bir yaz günü, Ali ve arkadaşları bisikletleriyle göl kenarına gitmeye karar verdiler. Gölün yanında piknik yaptılar, ağaçların gölgesinde dinlendiler. Ali, suyun üzerinde yüzen ördekleri izlerken, doğanın güzelliklerinin tadını çıkardı. Bu huzurlu anları unutamayacağını düşündü.",
-      "Minik Ayşe, okula giderken yol kenarında yaralı bir kuş buldu. Kuşu dikkatlice alarak öğretmenine götürdü. Öğretmeni, Ayşe’ye kuşun yarasını nasıl saracağını öğretti. Birkaç gün sonra, kuş iyileşti ve tekrar uçabildi. Ayşe, ona yardım ettiği için çok mutlu oldu.",
-      "Deniz kenarında yürüyen küçük bir çocuk, kıyıya vuran renkli taşları toplamaya başladı. Taşların her biri farklı şekil ve renkteydi. Taşları bir şişeye koyup evine götürmek istedi. Annesi, taşların denizdeki canlılar için önemli olduğunu anlattı. Çocuk, taşları geri bırakmaya karar verdi.",
-      "Yağmurlu bir sonbahar günü, Efe ve ablası bahçedeki yaprakları topluyordu. Efe, renkli yaprakları bir araya getirerek küçük bir çelenk yaptı. Ablası, bu çelengi evin kapısına asmalarını önerdi. Yağmur altında yaptıkları bu yaratıcı çalışma, Efe'ye doğanın güzelliklerini fark ettirdi.",
-      "Deniz, okulda ilk defa bilim fuarına katılacaktı. Arkadaşıyla birlikte bir volkan modeli yapmaya karar verdiler. Fuar günü, modellerini sergilerken izleyicilere volkanların nasıl patladığını anlattılar. Deniz, bilimle uğraşmanın ne kadar heyecan verici olduğunu düşündü.",
-      "Volkanlar, yeryüzündeki çatlaklardan çıkan lav ve gazların oluşturduğu doğal yapılardır. Volkan patlamaları, yerin altında biriken basınç nedeniyle gerçekleşir. Lav soğuyup katılaşınca yeni kara parçaları oluşturur. Volkanlar, yer kabuğunun hareketlerini anlamamıza yardımcı olur.",
-      "Can, okulda düzenlenen robotik yarışmasına katılmak için bir robot yapmaya karar verdi. Kodlama yaparak robotunu programladı ve arkadaşlarıyla birlikte yarışmaya katıldı. Robotları, parkuru başarıyla tamamladı. Can, kendi emeğiyle başardığı için çok gururlandı.",
-      "Robotik, makinelerin kodlama ve elektronikle yönetilmesini sağlayan bir bilim dalıdır. Günümüzde robotlar; endüstride, tıpta ve evlerde kullanılır. Robotlar, insanların yapamayacağı hassas görevleri üstlenebilir. Kodlama, robotların belirli işlemleri gerçekleştirmesi için önemlidir.",
-      "Elektrik, günlük yaşamda kullandığımız enerjinin önemli bir kaynağıdır. Elektrik; ışık, ısı ve güç üretiminde kullanılır. Elektrik devreleri, enerjiyi cihazlara ileten yollardır. Güvenli kullanıldığında hayatımızı kolaylaştıran elektrik, dikkat edilmezse tehlikeli olabilir."
-    ];
-
-    let feedbackMessages = [
-      "Harika iş çıkardın!", 
-      "Süper okudun!", 
-      "Tebrikler, çok iyi gidiyorsun!"
-    ];
-
+      "Deniz kenarında yürüyen küçük kız, kumların arasında parıldayan bir taş buldu...",
+      "Bir orman gezisinde, küçük bir çocuk eski bir harita buldu...",
+      "Küçük Zeynep, dedesinin köyüne gitmeyi çok severdi...",
+      "Ormanlar, dünyamızın akciğerleri olarak bilinir...",
+      "Bir kış sabahı, Elif penceresinden dışarı baktı..."
     ];
 
     let feedbackMessages = [
