@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Okuma Macerası</title>
+  <style>
+    /* Genel Stiller */
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background-image: url('arkaplan.jpg'); /* Arka plan görseli */
+      background-size: cover; /* Görselin ekranı tamamen kaplaması */
+      background-repeat: no-repeat; /* Görselin tekrar etmemesi */
+      background-position: center; /* Görselin ortalanması */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #ff6347;
+    }
+
+    #text-box {
+      border: 3px solid #ff6347;
+      padding: 15px;
+      margin-bottom: 20px;
+      display: inline-block;
+      border-radius: 10px;
+      min-width: 300px;
+      max-width: 100%;
+      background-color: #f0f8ff;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+
+    .word {
+      font-size: 1.5em;
+      margin-right: 8px;
+      padding: 5px;
+      display: inline-block;
+    }
+
+    button {
+      background-color: #ff6347;
+      color: white;
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background-color: #ff4500;
+    }
+
+    #stars {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #ff6347;
+    }
+
+    #feedback {
+      font-size: 1.5em;
+      color: green;
+      margin-top: 20px;
+    }
+
+    #next-buttons, #next-question {
+      margin-top: 20px;
+      display: none;
+    }
+
+    #timer {
+      font-size: 1.5em;
+      color: #ff6347;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Responsive Tasarım */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .word {
+        font-size: 1.2em;
+        margin-right: 5px;
+      }
+
+      button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+      }
+
+      #text-box {
+        padding: 10px;
+      }
+
+      #timer {
+        font-size: 1.2em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .word {
+        font-size: 1em;
+        margin-right: 4px;
+      }
+
+      button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+      }
+
+      #timer {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Başlangıç Ekranı -->
+    <div id="welcome">
+      <h1>Okuma Macerası</h1>
+      <p>Günlük okuma egzersizine hoş geldiniz!</p>
+      <button onclick="startExercise()">Başla</button>
+    </div>
+
+    <!-- Okuma ve Kontrol Alanı -->
+    <div id="text-section" class="hidden">
+      <div id="text-box"></div>
+      <div id="controls">
+        <button onclick="setSpeed(3000)">Hızlı</button>
+        <button onclick="setSpeed(1500)">Çok Hızlı</button>
+        <button onclick="setSpeed(750)">Süper Hızlı</button>
+        <button onclick="pauseResume()">Dur/Başla</button>
+      </div>
+      <div id="timer">Kalan Süre: 3:00</div>
+      <div id="stars">Yıldızlar: <span id="star-count">⭐</span></div>
+      <div id="feedback" class="hidden"></div>
+      <div id="next-buttons">
+        <p id="next-question">Yeni öyküye geçelim mi?</p>
+        <button onclick="proceedToNextStory()">Devam Edelim</button>
+      </div>
+    </div>
+
+    <!-- Sonuç Ekranı -->
+    <div id="result-screen" class="hidden">
+      <h1>Sonuç Ekranı</h1>
+      <p>Bugünlük bu kadar macera yeterli. Biraz da kitap okursan harika olur. Yarın görüşürüz!</p>
+      <p id="result-code"></p>
+    </div>
+
+  </div>
+
+  <script>
+    let stories = [
+       "Deniz kenarında yürüyen küçük kız, kumların arasında parıldayan bir taş buldu. Taşı eline aldığında, taşın içinden parlayan küçük bir dünya gördü. Taşı dikkatle inceledi ve bir deniz kabuğu gibi ses çıkardığını fark etti. Bu keşfi onu çok heyecanlandırdı.",
+      "Bir orman gezisinde, küçük bir çocuk eski bir harita buldu. Haritada kayıp bir hazine işaretlenmişti. Haritayı dikkatle inceledi ve hazineye ulaşmak için bir plan yaptı. Arkadaşlarını çağırarak birlikte ormanda hazine aramaya başladılar.",
+      "Ormanlar, dünyamızın akciğerleri olarak bilinir ve birçok canlıya ev sahipliği yapar. Ağaçlar, fotosentez yoluyla oksijen üretir, böylece soluduğumuz temiz havayı sağlar. Ormanları korumak, ekosistemimizin sağlıklı kalması için çok önemlidir.",
+      "Bir kış sabahı, Elif penceresinden dışarı baktı ve her yerin karla kaplandığını gördü. Heyecanla montunu giyip bahçeye koştu. Kar topu oynamak için arkadaşlarını çağırdı ve eğlenceli bir gün geçirdiler.",
+      "Küçük bir köyde yaşayan Ali, gökyüzündeki yıldızları izlemeyi çok severdi. Bir gece, teleskobuyla yeni bir yıldız keşfettiğini düşündü. Bu heyecan verici keşfini ailesine anlattı ve herkes onunla gurur duydu.",
+      "Yıldızlar, devasa gaz kütlelerinden oluşur ve kendi ışıklarını yayarlar. Gökyüzünde gördüğümüz yıldızlar, çok uzak mesafelerde yer alır. Yıldızlar gece gökyüzünü aydınlatır ve bizlere evrenin büyüklüğünü hatırlatır.",
+      "Mert, ilk defa kamp yapmaya gittiğinde ormanın derinliklerine doğru yürüdü. Bir çadır kurdu ve gece boyunca yıldızları izledi. Sabah olduğunda, kuş cıvıltılarıyla uyandı ve doğanın sessizliğini çok sevdi.",
+      "Küçük Zeynep, dedesinin köyüne gitmeyi çok severdi. Köydeki eski ev, taş duvarları ve büyük bahçesiyle onu çok etkilerdi. Bir gün dedesiyle bahçeye fidan dikti ve toprağı nasıl koruması gerektiğini öğrendi. Zeynep, doğanın önemini anlamaya başladı.",
+      "Bir yaz günü, Ali ve arkadaşları bisikletleriyle göl kenarına gitmeye karar verdiler. Gölün yanında piknik yaptılar, ağaçların gölgesinde dinlendiler. Ali, suyun üzerinde yüzen ördekleri izlerken, doğanın güzelliklerinin tadını çıkardı. Bu huzurlu anları unutamayacağını düşündü.",
+      "Minik Ayşe, okula giderken yol kenarında yaralı bir kuş buldu. Kuşu dikkatlice alarak öğretmenine götürdü. Öğretmeni, Ayşe’ye kuşun yarasını nasıl saracağını öğretti. Birkaç gün sonra, kuş iyileşti ve tekrar uçabildi. Ayşe, ona yardım ettiği için çok mutlu oldu.",
+      "Deniz kenarında yürüyen küçük bir çocuk, kıyıya vuran renkli taşları toplamaya başladı. Taşların her biri farklı şekil ve renkteydi. Taşları bir şişeye koyup evine götürmek istedi. Annesi, taşların denizdeki canlılar için önemli olduğunu anlattı. Çocuk, taşları geri bırakmaya karar verdi.",
+      "Yağmurlu bir sonbahar günü, Efe ve ablası bahçedeki yaprakları topluyordu. Efe, renkli yaprakları bir araya getirerek küçük bir çelenk yaptı. Ablası, bu çelengi evin kapısına asmalarını önerdi. Yağmur altında yaptıkları bu yaratıcı çalışma, Efe'ye doğanın güzelliklerini fark ettirdi.",
+      "Deniz, okulda ilk defa bilim fuarına katılacaktı. Arkadaşıyla birlikte bir volkan modeli yapmaya karar verdiler. Fuar günü, modellerini sergilerken izleyicilere volkanların nasıl patladığını anlattılar. Deniz, bilimle uğraşmanın ne kadar heyecan verici olduğunu düşündü.",
+      "Volkanlar, yeryüzündeki çatlaklardan çıkan lav ve gazların oluşturduğu doğal yapılardır. Volkan patlamaları, yerin altında biriken basınç nedeniyle gerçekleşir. Lav soğuyup katılaşınca yeni kara parçaları oluşturur. Volkanlar, yer kabuğunun hareketlerini anlamamıza yardımcı olur.",
+      "Can, okulda düzenlenen robotik yarışmasına katılmak için bir robot yapmaya karar verdi. Kodlama yaparak robotunu programladı ve arkadaşlarıyla birlikte yarışmaya katıldı. Robotları, parkuru başarıyla tamamladı. Can, kendi emeğiyle başardığı için çok gururlandı.",
+      "Robotik, makinelerin kodlama ve elektronikle yönetilmesini sağlayan bir bilim dalıdır. Günümüzde robotlar; endüstride, tıpta ve evlerde kullanılır. Robotlar, insanların yapamayacağı hassas görevleri üstlenebilir. Kodlama, robotların belirli işlemleri gerçekleştirmesi için önemlidir.",
+      "Elektrik, günlük yaşamda kullandığımız enerjinin önemli bir kaynağıdır. Elektrik; ışık, ısı ve güç üretiminde kullanılır. Elektrik devreleri, enerjiyi cihazlara ileten yollardır. Güvenli kullanıldığında hayatımızı kolaylaştıran elektrik, dikkat edilmezse tehlikeli olabilir."
+    ];
+
+    let feedbackMessages = [
+      "Harika iş çıkardın!", 
+      "Süper okudun!", 
+      "Tebrikler, çok iyi gidiyorsun!",
+      "Müthiş performans!", 
+      "Bravo, devam et!"
+    ];
+
+    let textBox = document.getElementById("text-box");
+    let currentIndex = 0;
+    let starCount = 0;
+    let wordCount = 0;
+    let totalWordCount = 0;
+    let pauseCount = 0;
+    let timeRemaining = 180; // 3 dakikalık süre
+    let interval;
+    let highlightInterval = 3000;
+    let isPaused = false;
+
+    function startExercise() {
+      document.getElementById("welcome").classList.add("hidden");
+      document.getElementById("text-section").classList.remove("hidden");
+      startTimer();
+      displayRandomStory();
+    }
+
+    function displayRandomStory() {
+      currentIndex = 0;
+      let randomIndex = Math.floor(Math.random() * stories.length);
+      displayStory(randomIndex);
+    }
+
+    function displayStory(index) {
+      textBox.innerHTML = "";
+      let words = stories[index].split(" ");
+      words.forEach((word) => {
+        let span = document.createElement("span");
+        span.className = "word";
+        span.textContent = word;
+        textBox.appendChild(span);
+      });
+      highlightWord();
+    }
+
+    function setSpeed(speed) {
+      highlightInterval = speed;
+    }
+
+    function pauseResume() {
+      isPaused = !isPaused;
+      if (isPaused) {
+        pauseCount++;
+      } else {
+        highlightWord();
+      }
+    }
+
+    function startTimer() {
+      interval = setInterval(() => {
+        if (!isPaused) {
+          timeRemaining--;
+          updateTimerDisplay();
+          if (timeRemaining <= 0) {
+            clearInterval(interval);
+            interval = null;
+            showResultScreen();
+          }
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      let minutes = Math.floor(timeRemaining / 60);
+      let seconds = timeRemaining % 60;
+      document.getElementById("timer").textContent = `Kalan Süre: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function highlightWord() {
+      if (isPaused) return;
+
+      let words = textBox.querySelectorAll(".word");
+      if (currentIndex < words.length) {
+        words[currentIndex].style.backgroundColor = "#ff6347";
+        words[currentIndex].style.color = "white";
+        setTimeout(() => {
+          if (!isPaused) {
+            words[currentIndex].style.backgroundColor = "transparent";
+            words[currentIndex].style.color = "black";
+            currentIndex++;
+            highlightWord();
+          }
+        }, highlightInterval);
+      } else {
+        wordCount = words.length;
+        totalWordCount += wordCount;
+        addStar();
+        giveFeedback();
+        stopTimer();
+        askForNextStory();
+      }
+    }
+
+    function stopTimer() {
+      clearInterval(interval);
+      interval = null;
+    }
+
+    function askForNextStory() {
+      document.getElementById("next-buttons").style.display = "block";
+    }
+
+    function proceedToNextStory() {
+      document.getElementById("next-buttons").style.display = "none";
+      displayRandomStory();
+      startTimer(); // Süreyi yeniden başlat
+    }
+
+    function showResultScreen() {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const resultCode = `${day}${totalWordCount}${pauseCount}${starCount}`;
+      document.getElementById("result-code").textContent = `Kodunuz: ${resultCode}`;
+      document.getElementById("text-section").classList.add("hidden");
+      document.getElementById("result-screen").classList.remove("hidden");
+    }
+
+    function addStar() {
+      starCount++;
+      document.getElementById("star-count").textContent = "⭐".repeat(starCount);
+    }
+
+    function giveFeedback() {
+      let feedback = feedbackMessages[Math.floor(Math.random() * feedbackMessages.length)];
+      document.getElementById("feedback").textContent = feedback;
+      document.getElementById("feedback").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
